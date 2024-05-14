@@ -3,7 +3,7 @@ pipeline TreesPipeline {
 	TreesExtractor -> TreesTextFileInterpreter;
 	TreesTextFileInterpreter
 		-> TreesCSVInterpreter 
-        ->  TreeColumnDeleter
+        -> TreeColumnDeleter
 	   	-> TreesTableInterpreter
 		-> TreesLoader;
 
@@ -22,11 +22,13 @@ pipeline TreesPipeline {
     valuetype GeoCoordinate oftype text{
         constraints: [
         GeopointFormat,
+        InvalidRows
     ];
     }
     valuetype StadtteilValid oftype text{
         constraints: [
             StartWithFurth,
+            InvalidRows
             ];
     }
     constraint GeopointFormat oftype RegexConstraint{
@@ -35,7 +37,9 @@ pipeline TreesPipeline {
     constraint StartWithFurth oftype RegexConstraint{
         regex: /^Furth/;
     }
-    
+    constraint InvalidRows oftype DenylistConstraint {
+        denylist: [" ", "Null", "NaN"];
+    }
     
     ///////////////////////////////////////////////
     
