@@ -3,8 +3,8 @@ pipeline TreesPipeline {
 	TreesExtractor -> TreesTextFileInterpreter;
 	TreesTextFileInterpreter
 		-> TreesCSVInterpreter 
+        ->  TreeColumnDeleter
 	   	-> TreesTableInterpreter
-        -> TreesTableTrasnformer
 		-> TreesLoader;
 
 	block TreesExtractor oftype HttpExtractor {
@@ -52,18 +52,9 @@ pipeline TreesPipeline {
 		];
 	}
 
-    
-
-    // transform DropColumn {
-    //  from DC oftype text;
-    //  to DCC oftype text;
-    //     DCC: "" ;
-    // }
-    // block TreesTableTrasnformer oftype TableTransformer{
-    //     inputColumns: ['baumart_deutsch'];
-    //     outputColumn: 'baumart_deutsch';
-    //     use: DropColumn;
-    // }
+    block TreeColumnDeleter oftype ColumnDeleter {
+        delete: [column E];
+    }
 
 	block TreesLoader oftype SQLiteLoader {
 		table: "trees";
