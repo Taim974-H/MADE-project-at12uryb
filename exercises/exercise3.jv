@@ -6,6 +6,7 @@ pipeline GoodsPipeline {
         -> DeleteMetaDataRows
         -> AddHeader
 		-> RenameHeader
+        -> DeleteColumns
 	   	-> GoodsTableInterpreter
 		-> GoodsLoader;
 		
@@ -13,14 +14,12 @@ pipeline GoodsPipeline {
         url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
 	}
 
-	block GoodsTextFileInterpreter oftype TextFileInterpreter{
-        encoding:'latin4';
-    }
+	block GoodsTextFileInterpreter oftype TextFileInterpreter{}
 
 	block GoodsCSVInterpreter oftype CSVInterpreter {
 		delimiter: ";";
 	}
-    
+
 //================================================================================================
 
 //Remove metadata rows (initial description and headers [data starts in row 9], copyright notice in the footer)
@@ -30,9 +29,53 @@ pipeline GoodsPipeline {
             row 41338, row 41339
 		];
 	}
-// Select only a subset of columns
-// Data about time and transported goods: Column A-E
-// Data about quantity: Column AT-AU
+
+// Select only a subset of columns. Data about time and transported goods. Column A-E.Data about quantity: Column AT-AU
+// I attempted to use compposite blocks but have no idea how to implement them. The documentation isn't clear.
+block DeleteColumns oftype ColumnDeleter {
+		delete: [
+			column F,
+			column G,
+			column H,
+			column I,
+			column J,
+			column K,
+			column L,
+			column M,
+			column N,
+			column O,
+			column P,
+			column Q,
+			column R,
+			column S,
+			column T,
+			column U,
+			column V,
+			column W,
+			column X,
+			column Y,
+			column Z,
+			column AA,
+			column AB,
+			column AC,
+			column AD,
+			column AE,
+			column AF,
+			column AG,
+			column AH,
+			column AI,
+			column AJ,
+			column AK,
+			column AL,
+			column AM,
+			column AN,
+			column AO,
+			column AP,
+			column AQ,
+			column AR,
+			column AS
+		];
+	}
 
 // Add header names for the first columns A-E
 // New names: 'year', 'month', 'goods_id', 'goods_name', 'goods_source'
