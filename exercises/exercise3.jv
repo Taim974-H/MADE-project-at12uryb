@@ -21,16 +21,13 @@ pipeline GoodsPipeline {
 	}
 
 //================================================================================================
-
-//Remove metadata rows (initial description and headers [data starts in row 9], copyright notice in the footer)
-    block DeleteMetaDataRows oftype RowDeleter {
+   block DeleteMetaDataRows oftype RowDeleter {
 		delete: [
 			row 0,row 1,row 2,row 3,row 4,row 5,row 6,row 7,
             row 41338, row 41339
 		];
 	}
 
-// Select only a subset of columns. Data about time and transported goods. Column A-E.Data about quantity: Column AT-AU
 // I attempted to use compposite blocks but have no idea how to implement them. The documentation isn't clear.
 block DeleteColumns oftype ColumnDeleter {
 		delete: [
@@ -77,44 +74,35 @@ block DeleteColumns oftype ColumnDeleter {
 		];
 	}
 
-// Add header names for the first columns A-E
-// New names: 'year', 'month', 'goods_id', 'goods_name', 'goods_source'
     block AddHeader oftype CellWriter{
         at:range A1:E1;
         write:['year', 'month', 'goods_id', 'goods_name', 'goods_source'];
     }
 
-// Rename headers for the quantity columns AT-AU
-// New names: 'abroad', 'total'
     block RenameHeader oftype CellWriter{
         at: range AT1: AU1;
         write:[ 'abroad', 'total'];
     }
 
-// Choose suitable value types for all columns
-// Numeric values must be positive integers
-    valuetype PositiveInt oftype integer{constraints : [RangeConstraint,InvalidRows];}
+    valuetype PositiveInt oftype integer{constraints : [RangeConstraint];}
     constraint RangeConstraint oftype RangeConstraint{
          lowerBound:0;
          lowerBoundInclusive:false;
     }
 
-// 'month' must be a German month, capitalized
-    valuetype ValidMonth oftype text {constraints: [ValidMonthFormat,InvalidRows];}
+    valuetype ValidMonth oftype text {constraints: [ValidMonthFormat];}
     constraint ValidMonthFormat oftype RegexConstraint {
         regex: /\b(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\b/;
     }
 
-// 'goods_id' must start with NST7-, followed by three numbers or capital letters
-    valuetype ValidId oftype text {constraints: [ValidIdFormat,InvalidRows];}
+    valuetype ValidId oftype text {constraints: [ValidIdFormat];}
     constraint ValidIdFormat oftype RegexConstraint {
         regex: /^NST7-[0-9A-Z]{3}$/;
     }
 
-// Drop rows with missing or invalid values
-    constraint InvalidRows oftype DenylistConstraint {
-        denylist: [" ", "Null", "NaN"];
-    }
+    // constraint InvalidRows oftype DenylistConstraint {
+    //     denylist: ["", "Null", "NaN"];
+    // }
 
 //================================================================================================
 	block GoodsTableInterpreter oftype TableInterpreter {
