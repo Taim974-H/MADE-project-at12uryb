@@ -36,7 +36,7 @@ For NMVOC, emission time series (1970-2018) by sector and country are provided i
 3. Preprocess the datasets [#3][i1]
 4. Plot the data [#4][i1]
 
-[i1]: https://github.com/jvalue/made-template/issues/1
-[i2]: https://github.com/jvalue/made-template/issues/2
-[i3]: https://github.com/jvalue/made-template/issues/3
-[i4]: https://github.com/jvalue/made-template/issues/4
+[i1]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/1
+[i2]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/2
+[i3]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/3
+[i4]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/4
