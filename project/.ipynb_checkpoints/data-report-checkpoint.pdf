@@ -1,0 +1,146 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b050894a",
+   "metadata": {},
+   "source": [
+    "\n",
+    "### Investigating Trends in NMVOC Emissions in Ireland: Establishing a Baseline for Climate Action\n",
+    "\n",
+    "In the context of Ireland's commitment to climate action, as evidenced by the Climate Action and Low Carbon Development (Amendment) Act 2021, this project focuses on Non-methane Volatile Organic Compounds (NMVOC) emissions. The project aims to establish a baseline by examining historical trends in NMVOC emissions in Ireland prior to the Act's implementation.\n",
+    "\n",
+    "NMVOCs are a critical area of study due to their multifaceted impact. They contribute not only to climate change but also pose a threat to human health and agricultural productivity. By analyzing historical data on NMVOC emissions and waste generation, the project seeks to identify potential correlations between these factors. This analysis will provide valuable insights for policymakers as they develop strategies to achieve the ambitious goals outlined in the Act.\n",
+    "\n",
+    "This project will contribute to Ireland's climate action efforts in the following ways:\n",
+    "\n",
+    "> **Establishing a Baseline:** By analyzing historical data, the project creates a benchmark for future comparisons, allowing for effective measurement of progress towards NMVOC emission reduction targets.\n",
+    "\n",
+    ">**Identifying Key Sources:** Understanding the relationship between waste generation and NMVOC emissions will help pinpoint sectors or activities that require the most significant emission reduction efforts.\n",
+    "\n",
+    "> **Optimizing Waste Management Strategies:** Evaluating the balance between waste generation and treatment can inform the development of more sustainable waste management practices, potentially leading to further reductions in NMVOC emissions."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a4e5a4e7",
+   "metadata": {},
+   "source": [
+    "## Datasources\n",
+    "The project utilizes three datasets with varying structures:\n",
+    "\n",
+    "### GWA01 and GWA02 (Irish Government Website):\n",
+    "Content: Waste treatment data for each year in Ireland\n",
+    "\n",
+    "Structure: Each row represents a single record with attributes detailing:\n",
+    "* Waste nature\n",
+    "* Treatment method\n",
+    "* Waste quantity\n",
+    "\n",
+    "#### Datasource1: Generation of waste (GWA01)\n",
+    "\n",
+    "* Metadata URL: https://data.gov.ie/\n",
+    "* Data URL: https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA01/CSV/1.0/en\n",
+    "* Data Type: CSV\n",
+    "\n",
+    "#### Datasource2: Treatment of waste (GWA02)\n",
+    "\n",
+    "* Metadata URL: https://data.gov.ie/\n",
+    "* Data URL: https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA02/CSV/1.0/en\n",
+    "* Data Type: CSV\n",
+    "\n",
+    "These datasets are sourced from the Irish government's website. The first dataset provides information on the generation of waste categorized by different types of waste from 2004 to 2020. The second dataset details the treatment of waste, including various waste management operations over the same period.\n",
+    "\n",
+    "\n",
+    "### EDGAR v6.1:\n",
+    "Content: National emissions data, specifically focusing on NMVOC emissions\n",
+    "\n",
+    "Structure: Each row represents emissions data for a particular:\n",
+    "* Sector\n",
+    "* Country\n",
+    "* Year\n",
+    "\n",
+    "#### Datasource3: NMVOC emissions (NMVOC from EDGARv6.1)\n",
+    "\n",
+    "* Metadata URL: https://edgar.jrc.ec.europa.eu/index.php/dataset_ap61\n",
+    "* Data URL: https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/EDGAR/datasets/v61_AP/NMVOC/v61_AP_NMVOC_1970_2018b.zip\n",
+    "* Data Type: xlsx\n",
+    "* Format Extensible Markup Language (XML) file (within a zip archive)\n",
+    "\n",
+    "This dataset is part of a larget dataset, EDGARv6.1. The study focuses on NMVOC emission time series (1970-2018) by sector and country and the data provided in an overview table (.xls).\n",
+    "\n",
+    "#### Key Differences\n",
+    "\n",
+    "The primary distinction lies in the data source and format:\n",
+    "\n",
+    "* GWA01 and GWA02 provide detailed waste treatment data specific to Ireland, downloaded directly from a government website.\n",
+    "* EDGAR v6.1 offers broader emissions data, including NMVOCs, for various countries and sectors, but requires extraction from a zipped archive.\n",
+    "\n",
+    "Possible data usage:\n",
+    ">**Trend Analysis:** Analyzing how NMVOC emissions have changed over time for different countries and sectors.\n",
+    "\n",
+    ">**Comparative Analysis:** Comparing NMVOC emissions between different countries or regions.\n",
+    "\n",
+    ">**Impact Assessment:** Assessing the impact of different sectors on NMVOC emissions.\n",
+    "Policy Evaluation: Evaluating the effectiveness of policies aimed at reducing emissions by comparing data before and after policy implementation. In our case, before the Climate Action and Low Carbon Development (Amendment) Act 2021.\n",
+    "\n",
+    "\n",
+    "Describe the licenses of your data sources, why you are allowed to use the data and how you are planning to follow their obligations\n",
+    "If your source data is under a standard open-data license just pointing out where to find that is enough information for being allowed to use it, please still describe how you plan to fulfill their obligations"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b9a100cf",
+   "metadata": {},
+   "source": [
+    "# Data Pipeline\n",
+    "Describe your data pipeline on a high level, which technology did you use to implement it\n",
+    "Which transformation or cleaning steps did you do and why?\n",
+    "What problems did you encounter and how did you solve them?\n",
+    "Describe how your pipeline deals with errors or changing input data"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ed549950",
+   "metadata": {},
+   "source": [
+    "# Result and Limitations\n",
+    "Describe the output data of your data pipeline\n",
+    "What is the data structure and quality of your result? (Compare lecture D01)\n",
+    "What data format did you choose as the output of your pipeline and why\n",
+    "Critically reflect on your data and any potential issues you anticipate for your final report"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "18c460c0",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
