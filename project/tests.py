@@ -13,6 +13,8 @@ class TestPipeline(unittest.TestCase):
     def setUp(self):
         self.data_url1 = 'https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/EDGAR/datasets/v61_AP/NMVOC/v61_AP_NMVOC_1970_2018b.zip'
         self.data_name1 = 'emissions'
+        self.data_url2 = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA02/CSV/1.0/en'
+        self.data_name2 = 'treat_waste'
         self.data_dir = 'data'
         data = {
             'integers': [1, 2, np.nan, 4, 5],
@@ -67,7 +69,21 @@ class TestPipeline(unittest.TestCase):
             assert_frame_equal(df, self.sample_df, check_dtype=False)
             os.remove(db_full_path)
         except Exception as e:
-            self.fail(f"Database file not created: {e}")            
+            self.fail(f"Database file not created: {e}")       
+
+    def test_pipeline_execution(self):
+        # test if the pipeline is executed successfully
+        self.expected_output_file = 'data/test_emissions.sqlite'
+        pl = Pipeline(self.data_url1, 'test_emissions', self.data_dir)
+        pl.set_df(pl.open_zip_xlsx())
+        drop = ['Name','IPCC_annex']
+        rename = {'ipcc_code_2006_for_standard_report_name': 'Emission Sector'}
+        pl.clean_data(rename_columns=rename,columns_toDrop=drop)
+        pl.create_sqlite()
+        # Validate that the expected output file exists
+        self.assertTrue(os.path.exists(self.expected_output_file),
+                        "Output file '{}' not created by the pipeline!".format(self.expected_output_file))
+        os.remove(self.expected_output_file)
 
 if __name__ == '__main__':
     unittest.main(exit=False)

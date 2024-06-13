@@ -37,8 +37,10 @@ This dataset is part of a larget dataset, EDGARv6.1. The study focuses on NMVOC 
 2. Find datasets related to emissions due to waste management [#2][i1]
 3. Preprocess the datasets [#3][i1]
 4. Plot the data [#4][i1]
+5. Automated test for data pipeline [#5][i5]
 
 [i1]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/1
 [i2]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/2
 [i3]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/3
 [i4]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/4
+[i5]: https://github.com/Taim974-H/MADE-project-at12uryb/issues/7
