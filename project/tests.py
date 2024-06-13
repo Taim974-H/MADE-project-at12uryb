@@ -6,6 +6,7 @@ import pytest
 import sqlite3
 import pandas as pd
 import numpy as np
+import os
 import pandas.testing as assert_frame_equal
 
 
@@ -28,8 +29,6 @@ class TestPipeline(unittest.TestCase):
             'bools': [True, False, True, None, False]
         }
         self.sample_df = pd.DataFrame(data)
-
-
 
     def test_open_zip_xlsx(self):
         pipeline = Pipeline(url=self.data_url1)
@@ -58,44 +57,10 @@ class TestPipeline(unittest.TestCase):
         self.assertIn('Numbers', df_clean.columns, "Column not renamed")
         self.assertIn('Letters', df_clean.columns, "Column not renamed")
 
-
-
-        
-    
-    # def test_open_csv(self):
-    #     url = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA02/CSV/1.0/en'
-    #     data_name = 'treat_waste'
-    #     data_dir = 'data'
-    #     pipeline = Pipeline(url, data_name, data_dir)
-    #     df = pipeline.open_csv()
-    #     assert df.shape == (6, 3)
-
-    # def test_clean_data(self):
-    #     url = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA01/CSV/1.0/en'
-    #     data_name = 'generate_waste'
-    #     data_dir = 'data'
-    #     pipeline = Pipeline(url, data_name, data_dir)
-    #     df = pipeline.open_csv()
-    #     columns_toDrop = ['Year', 'Unit']
-    #     rename_columns = {'Waste Generation': 'Waste_Generation'}
-    #     df = pipeline.clean_data(df, columns_toDrop, rename_columns)
-    #     assert df.shape == (6, 2)
-
-    # def test_create_sqldb(self):
-    #     url = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA01/CSV/1.0/en'
-    #     data_name = 'generate_waste'
-    #     data_dir = 'data'
-    #     pipeline = Pipeline(url, data_name, data_dir)
-    #     df = pipeline.open_csv()
-    #     columns_toDrop = ['Year', 'Unit']
-    #     rename_columns = {'Waste Generation': 'Waste_Generation'}
-    #     df = pipeline.clean_data(df, columns_toDrop, rename_columns)
-    #     pipeline.create_sqldb(df)
-    #     db_full_path = 'data/generate_waste'
-    #     db_con = sqlite3.connect(db_full_path)
-    #     query = 'SELECT * FROM treatment'
-    #     df_sql = pd.read_sql(query, db_con)
-    #     assert_frame_equal(df, df_sql)
+    def test_create_sqlite(self):
+        pl = Pipeline(data_name='test', data_dir='data')
+        pl.set_df(self.sample_df)
+        pl.create_sqlite()
 
 if __name__ == '__main__':
     unittest.main(exit=False)

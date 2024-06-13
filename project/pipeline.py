@@ -16,7 +16,6 @@ class Pipeline:
             print(f"Directory '{data_dir}' created.")
         self.df = None
 
-
     def open_zip_xlsx(self):
         if (self.url == None):
             print('No url provided')
@@ -27,7 +26,6 @@ class Pipeline:
                     if not file.endswith('_readme.html'):
                         with zfile.open(file) as excel_file_content:
                             self.df = pd.read_excel(excel_file_content,skiprows=9)
-                    
         print('Zip file imported and created draframe from xlsx file')
         return self.df
     
@@ -66,11 +64,13 @@ class Pipeline:
     #     self.df.dropna(inplace=True)
     #     return self.df
 
-    def create_sqldb(self,df):
+    def create_sqlite(self):
+        if not self.data_name.endswith('.sqlite'):
+            self.data_name += '.sqlite'
         db_full_path = os.path.join(self.data_dir, self.data_name)
         db_con = sqlite3.connect(db_full_path)
-        df.reset_index(inplace=True)
-        df.to_sql('treatment', db_con, if_exists='replace', index=False)
+        self.df.reset_index(inplace=True)
+        self.df.to_sql(name=self.data_name, con=db_con, if_exists='replace', index=False)
         db_con.close()
         print("Database created successfully. Dataframe saved to sqlite database")
 
@@ -94,7 +94,7 @@ class DownloadData:
         df = data_p.clean_data(rename_columns=columns_to_rename,columns_toDrop=columns_to_drop)
         columns_to_keep = ['Emission Sector'] + [f'Y_{year}' for year in range(2004, 2019)]
         df = df[columns_to_keep]
-        data_p.create_sqldb(df)
+        data_p.create_sqlite()
 
     def download_data2(self):
         data_p = Pipeline(self.data_url2, self.data_name2, self.data_dir)
@@ -102,7 +102,7 @@ class DownloadData:
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C04253V05027', 'C04251V05025','C04252V05026','UNIT']
         df = data_p.clean_data(columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
-        data_p.create_sqldb(df)
+        data_p.create_sqlite()
                
 
     def download_data3(self):
@@ -111,7 +111,7 @@ class DownloadData:
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C014259V05033', 'C04253V05027','C04251V05025','UNIT']
         df = data_p.clean_data(columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
-        data_p.create_sqldb(df)
+        data_p.create_sqlite()
 
 
 if __name__ == '__main__':
