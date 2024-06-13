@@ -2,7 +2,8 @@
 
 pipeline TemperatureMeasurementPipeline{
 
-    TemperaturesGTFSExtractor
+    TemperatureHttpExtractor
+    -> TemperaturesArchiveInterpreter
     -> TemperatureFilePicker
     -> TemperatureFileInterpreter
     -> TemperatureCSVFileInterpreter
@@ -13,19 +14,20 @@ pipeline TemperatureMeasurementPipeline{
     -> BatteryTemperatureCelsiusToFahrenheitTableTransformer
     -> TemperaturesLoader;
 
-    block TemperaturesGTFSExtractor oftype GTFSExtractor{
-        url:"https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
-    }
-
-    block TemperatureFilePicker oftype FilePicker{
-        path: "/data.csv";
-    }
     
-    block TemperatureFileInterpreter oftype TextFileInterpreter{}
-
-    block TemperatureCSVFileInterpreter oftype CSVInterpreter{
-        delimiter:";";
+    block TemperatureHttpExtractor oftype HttpExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    } 
+    block TemperaturesArchiveInterpreter oftype ArchiveInterpreter {
+        archiveType: "zip";  
     }
+    // block TemperaturesGTFSExtractor oftype GTFSExtractor{
+    //     url:"https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    // }
+
+    block TemperatureFilePicker oftype FilePicker{path: "/data.csv";}
+    block TemperatureFileInterpreter oftype TextFileInterpreter{encoding: "utf8";}
+    block TemperatureCSVFileInterpreter oftype CSVInterpreter{delimiter:";";}
     
     // "id", // “Geraet” to “id”
     // "producer",  // “Hersteller” to “producer”
