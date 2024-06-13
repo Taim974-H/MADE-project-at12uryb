@@ -50,24 +50,11 @@ class Pipeline:
             self.df.dropna(inplace=True)
         print("Data cleaned successfully. Tasks carried out: drop columns, rename columns, drop na")
         return self.df
-    
-    # might be better to seperate the clean_data function into seperate functions
-    # user might want to drop column after renaming them or vice versa
-    # easier to test the functions seperately
-    # def rename_columns(self, rename_columns):
-    #     self.df = self.df.rename(columns=rename_columns)
-    #     return self.df
-    # def drop_columns(self, columns_toDrop):
-    #     self.df = self.df.drop(columns=columns_toDrop)
-    #     return self.df
-    # def drop_na(self):
-    #     self.df.dropna(inplace=True)
-    #     return self.df
 
     def create_sqlite(self):
-        if not self.data_name.endswith('.sqlite'):
-            self.data_name += '.sqlite'
         db_full_path = os.path.join(self.data_dir, self.data_name)
+        if not db_full_path.endswith('.sqlite'):
+            db_full_path += '.sqlite'
         db_con = sqlite3.connect(db_full_path)
         self.df.reset_index(inplace=True)
         self.df.to_sql(name=self.data_name, con=db_con, if_exists='replace', index=False)

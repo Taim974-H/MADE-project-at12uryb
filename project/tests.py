@@ -7,7 +7,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import os
-import pandas.testing as assert_frame_equal
+from pandas.testing import assert_frame_equal 
 
 
 
@@ -61,6 +61,19 @@ class TestPipeline(unittest.TestCase):
         pl = Pipeline(data_name='test', data_dir='data')
         pl.set_df(self.sample_df)
         pl.create_sqlite()
+        try:
+            db_full_path = os.path.join(pl.data_dir, 'test.sqlite')
+            assert os.path.exists(db_full_path), "Database file not created!"
+
+            conn = sqlite3.connect(db_full_path)
+            query = "SELECT * FROM test"
+            df = pd.read_sql_query(query, conn)
+            conn.close()
+            
+            # it checks if the dataframes of the database and the sample dataframe are equal
+            assert_frame_equal(df, self.sample_df, check_dtype=False)
+        except Exception as e:
+            self.fail(f"Database file not created: {e}")            
 
 if __name__ == '__main__':
     unittest.main(exit=False)
