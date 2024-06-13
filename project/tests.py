@@ -17,10 +17,6 @@ class TestPipeline(unittest.TestCase):
     def setUp(self):
         self.data_url1 = 'https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/EDGAR/datasets/v61_AP/NMVOC/v61_AP_NMVOC_1970_2018b.zip'
         self.data_name1 = 'emissions'
-        self.data_url2 = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA02/CSV/1.0/en'
-        self.data_name2 = 'treat_waste'
-        self.data_url3 = 'https://ws.cso.ie/public/api.restful/PxStat.Data.Cube_API.ReadDataset/GWA01/CSV/1.0/en'
-        self.data_name3 = 'generate_waste'
         self.data_dir = 'data'
         data = {
             'integers': [1, 2, np.nan, 4, 5],
@@ -58,7 +54,7 @@ class TestPipeline(unittest.TestCase):
         self.assertIn('Letters', df_clean.columns, "Column not renamed")
 
     def test_create_sqlite(self):
-        pl = Pipeline(data_name='test', data_dir='data')
+        pl = Pipeline(data_name='test', data_dir=self.data_dir)
         pl.set_df(self.sample_df)
         pl.create_sqlite()
         try:
@@ -69,9 +65,10 @@ class TestPipeline(unittest.TestCase):
             query = "SELECT * FROM test"
             df = pd.read_sql_query(query, conn)
             conn.close()
-            
+
             # it checks if the dataframes of the database and the sample dataframe are equal
             assert_frame_equal(df, self.sample_df, check_dtype=False)
+            os.remove(db_full_path)
         except Exception as e:
             self.fail(f"Database file not created: {e}")            
 
