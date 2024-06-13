@@ -52,10 +52,6 @@ pipeline TemperatureMeasurementPipeline{
     // block TemperaturesColumnDeleter oftype ColumnDeleter {
     //     delete: [column F, column G, column H, column I];
     // }
-    // block TemperatureColDataSelector oftype CellRangeSelector   {
-    //     select: range A1:K*;
-    // }
-
     block TemperatureTableInterpreter oftype TableInterpreter{
         header:true;
         columns:[
