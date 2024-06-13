@@ -7,38 +7,64 @@ from zipfile import ZipFile
 import sqlite3
 
 class Pipeline:
-    def __init__(self,url,data_name, data_dir):
+    def __init__(self,url=None,data_name=None, data_dir=None):
         self.url = url
         self.data_name =data_name
         self.data_dir = data_dir
-        if not os.path.exists(data_dir):
+        if data_dir and not os.path.exists(data_dir):
             os.makedirs(data_dir)
             print(f"Directory '{data_dir}' created.")
+        self.df = None
+
 
     def open_zip_xlsx(self):
-        df_xls=None
+        if (self.url == None):
+            print('No url provided')
+            return None
         with urlopen(self.url) as zipresp:
             with ZipFile(BytesIO(zipresp.read())) as zfile:
                 for file in zfile.namelist():
                     if not file.endswith('_readme.html'):
                         with zfile.open(file) as excel_file_content:
-                            df_xls = pd.read_excel(excel_file_content,skiprows=9)
+                            self.df = pd.read_excel(excel_file_content,skiprows=9)
                     
         print('Zip file imported and created draframe from xlsx file')
-        return df_xls
+        return self.df
     
     def open_csv(self):
-        self._df = pd.read_csv(self.url)
-        return self._df
+        if (self.url == None):
+            print('No url provided')
+            return None
+        self.df  = pd.read_csv(self.url)
+        return self.df 
     
-    def clean_data(self,df, columns_toDrop=None, rename_columns=None):
+    # to test function without passing url/ using sample data
+    def set_df(self,df):
+        self.df = df
+        return self.df
+    
+    def clean_data(self,rename_columns=None, columns_toDrop=None,drop_na=True):
         if rename_columns:
-            df = df.rename(columns=rename_columns)
+            self.df = self.df.rename(columns=rename_columns)
         if columns_toDrop:
-            df = df.drop(columns=columns_toDrop)
-        df.dropna(inplace=True)
+            self.df = self.df.drop(columns=columns_toDrop)
+        if drop_na:
+            self.df.dropna(inplace=True)
         print("Data cleaned successfully. Tasks carried out: drop columns, rename columns, drop na")
-        return df
+        return self.df
+    
+    # might be better to seperate the clean_data function into seperate functions
+    # user might want to drop column after renaming them or vice versa
+    # easier to test the functions seperately
+    # def rename_columns(self, rename_columns):
+    #     self.df = self.df.rename(columns=rename_columns)
+    #     return self.df
+    # def drop_columns(self, columns_toDrop):
+    #     self.df = self.df.drop(columns=columns_toDrop)
+    #     return self.df
+    # def drop_na(self):
+    #     self.df.dropna(inplace=True)
+    #     return self.df
 
     def create_sqldb(self,df):
         db_full_path = os.path.join(self.data_dir, self.data_name)
@@ -62,11 +88,11 @@ class DownloadData:
     def download_data1(self):
         data_p = Pipeline(self.data_url1, self.data_name1, self.data_dir)
         df = data_p.open_zip_xlsx()
-        columns_to_keep = ['Emission Sector'] + [f'Y_{year}' for year in range(2004, 2019)]
         columns_to_drop = ['Name','IPCC_annex', 'C_group_IM24_sh', 'Country_code_A3', 'ipcc_code_2006_for_standard_report', 'Substance', 'fossil_bio']
         columns_to_rename = {'ipcc_code_2006_for_standard_report_name': 'Emission Sector'}
         df = df.loc[df['Name'] == 'Ireland']
-        df = data_p.clean_data(df,columns_to_drop,columns_to_rename)
+        df = data_p.clean_data(rename_columns=columns_to_rename,columns_toDrop=columns_to_drop)
+        columns_to_keep = ['Emission Sector'] + [f'Y_{year}' for year in range(2004, 2019)]
         df = df[columns_to_keep]
         data_p.create_sqldb(df)
 
@@ -74,7 +100,7 @@ class DownloadData:
         data_p = Pipeline(self.data_url2, self.data_name2, self.data_dir)
         df = data_p.open_csv()
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C04253V05027', 'C04251V05025','C04252V05026','UNIT']
-        df = data_p.clean_data(df, columns_to_drop)
+        df = data_p.clean_data(columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
         data_p.create_sqldb(df)
                
@@ -83,14 +109,17 @@ class DownloadData:
         data_p = Pipeline(self.data_url3, self.data_name3, self.data_dir)
         df = data_p.open_csv()
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C014259V05033', 'C04253V05027','C04251V05025','UNIT']
-        df = data_p.clean_data(df, columns_to_drop)
+        df = data_p.clean_data(columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
         data_p.create_sqldb(df)
 
-# Create an instance of DownloadData
-download_data_instance = DownloadData()
 
-# Download and process each dataset
-download_data_instance.download_data1()
-download_data_instance.download_data2()
-download_data_instance.download_data3()
+if __name__ == '__main__':
+    # Create an instance of DownloadData
+    download_data_instance = DownloadData()
+
+    # Download and process each dataset
+    download_data_instance.download_data1()
+    download_data_instance.download_data2()
+    download_data_instance.download_data3()
+
