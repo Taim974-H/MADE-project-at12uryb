@@ -1,15 +1,11 @@
 from numpy import NAN
 from pipeline import Pipeline
-from unittest.mock import patch
 import unittest
-import pytest
 import sqlite3
 import pandas as pd
 import numpy as np
 import os
 from pandas.testing import assert_frame_equal 
-
-
 
 class TestPipeline(unittest.TestCase):
 # https://docs.python.org/3/library/unittest.html
@@ -61,6 +57,7 @@ class TestPipeline(unittest.TestCase):
             db_full_path = os.path.join(pl.data_dir, 'test.sqlite')
             assert os.path.exists(db_full_path), "Database file not created!"
 
+            #verify if the data is saved in the database in corresponding table
             conn = sqlite3.connect(db_full_path)
             query = "SELECT * FROM test"
             df = pd.read_sql_query(query, conn)
