@@ -4,7 +4,6 @@ pipeline GTFS{
     -> StopFilePicker
     -> StopFileInterpreter
     -> StopCSVInterpreter
-    -> LatRangeSelector
     -> StopTableInterpreter
     -> StopLoader;
 
@@ -14,30 +13,24 @@ pipeline GTFS{
     }
 
     block StopFilePicker oftype FilePicker{
-        path: ".txt";
+        path: "/stops.txt";
     }
 
-    block StopFileInterpreter oftype TextFileInterpreter{
-        encoding: "utf8";
-    }
+    block StopFileInterpreter oftype TextFileInterpreter{encoding: "utf8";}
     block StopCSVInterpreter oftype CSVInterpreter { }
-
-
-    block LatRangeSelector oftype CellRangeSelector {
-        select: range A1:E*;
-    }
-
     
-    valuetype GeoCoordinate oftype text{
+    valuetype GeoCoordinate oftype decimal{
         constraints: [
             GeopointFormat,
             InvalidRows
         ];
     }
-
-    constraint GeopointFormat oftype RegexConstraint{
-        regex: /^-?(90(\.0+)?|[1-8]?\d(\.\d+)?|0(\.\d+)?|[0]?)$/;
-    }
+    constraint GeopointFormat oftype RangeConstraint {
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBoundInclusive: true;
+        upperBound: 90;
+        }
 
     constraint InvalidRows oftype DenylistConstraint {
         denylist: ["", "Null", "NaN"];
@@ -69,7 +62,5 @@ pipeline GTFS{
         table: "stops";
         file: "./gtfs.sqlite";
     }
-
-    
 
 }
