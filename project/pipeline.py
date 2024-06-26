@@ -59,7 +59,7 @@ class Pipeline:
         self.df.reset_index(inplace=True)
         self.df.to_sql(name=self.data_name, con=db_con, if_exists='replace', index=False)
         db_con.close()
-        print("Database created successfully. Dataframe saved to sqlite database")
+        print("Database created successfully. Dataframe saved to sqlite database") 
 
 class DownloadData:
 
