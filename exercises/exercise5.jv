@@ -17,12 +17,12 @@ pipeline GTFS{
     }
 
     block StopFileInterpreter oftype TextFileInterpreter{encoding: "utf8";}
-    block StopCSVInterpreter oftype CSVInterpreter { delimiter: ",";}
+    block StopCSVInterpreter oftype CSVInterpreter {enclosing: '"';}
     
     valuetype GeoCoordinate oftype decimal{
         constraints: [
             GeopointFormat,
-            InvalidRows
+            // InvalidRows
         ];
     }
     constraint GeopointFormat oftype RangeConstraint {
