@@ -92,7 +92,7 @@ class DownloadData:
         data_p.create_sqlite()
                
     def download_data3(self):
-        data_p = Pipeline(self.data_url3, self.data_name3, self.data_dir)
+        data_p = Pipeline(self.data_url3, self.data_name3, self.data_dir) 
         df = data_p.open_csv()
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C014259V05033', 'C04253V05027','C04251V05025','UNIT']
         df = data_p.clean_data(columns_toDrop=columns_to_drop)
