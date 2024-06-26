@@ -17,7 +17,7 @@ pipeline GTFS{
     }
 
     block StopFileInterpreter oftype TextFileInterpreter{encoding: "utf8";}
-    block StopCSVInterpreter oftype CSVInterpreter { }
+    block StopCSVInterpreter oftype CSVInterpreter { delimiter: ",";}
     
     valuetype GeoCoordinate oftype decimal{
         constraints: [
@@ -41,9 +41,12 @@ pipeline GTFS{
             ZoneFormat
         ];
     }
-    constraint  ZoneFormat oftype RegexConstraint{
-        //Only keep stops from zone 1645
-        regex: /^1645$/;
+
+    constraint ZoneFormat oftype RangeConstraint {
+        lowerBound: 1645;
+        lowerBoundInclusive: true;
+        upperBound: 1645;
+        upperBoundInclusive: true;
     }
 
 
@@ -51,7 +54,7 @@ pipeline GTFS{
         header: true;
         columns:[
             "stop_id" oftype integer,
-            "stop_name" oftype text, //Conditional columns are considered as required
+            "stop_name" oftype text,
             "stop_lat" oftype GeoCoordinate,
             "stop_lon" oftype GeoCoordinate,
             "zone_id" oftype ValidZone,
