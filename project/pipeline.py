@@ -91,7 +91,6 @@ class DownloadData:
         df = df[df['Waste Category'] != 'Total waste']
         data_p.create_sqlite()
                
-
     def download_data3(self):
         data_p = Pipeline(self.data_url3, self.data_name3, self.data_dir)
         df = data_p.open_csv()
