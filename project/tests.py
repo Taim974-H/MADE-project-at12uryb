@@ -55,6 +55,7 @@ class TestPipeline(unittest.TestCase):
         pl = Pipeline(data_name='test', data_dir=self.data_dir)
         pl.set_df(self.sample_df)
         pl.create_sqlite()
+        
         try:
             db_full_path = os.path.join(pl.data_dir, 'test.sqlite')
             assert os.path.exists(db_full_path), "Database file not created!"
