@@ -29,7 +29,7 @@ These datasets are sourced from the Irish government's website. The first datase
 * Data URL: https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/EDGAR/datasets/v61_AP/NMVOC/v61_AP_NMVOC_1970_2018b.zip
 * Data Type: xlsx
 
-This dataset is part of a larget dataset, EDGARv6.1. The study focuses on NMVOC emission time series (1970-2018) by sector and country and the data provided in an overview table (.xls).
+This dataset is part of a larger dataset, EDGARv6.1. The study focuses on NMVOC emission time series (1970-2018) by sector and country and the data provided in an overview table (.xls). Emission country totals are expressed in kt substance/year and the IPCC 1996 and 2006 codes are used for specification of the sectors.
 
 ## Work Packages
 
