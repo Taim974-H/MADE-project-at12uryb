@@ -41,14 +41,22 @@ class Pipeline:
         self.df = df
         return self.df
     
-    def clean_data(self,rename_columns=None, columns_toDrop=None,drop_na=True):
+    def get_df(self): 
+        print("getter method called") 
+        return self.df 
+
+    def clean_data(self,df=None,rename_columns=None, columns_toDrop=None,drop_na=True,columns_to_keep=None):
+        if df is not None:
+            self.df = df
         if rename_columns:
             self.df = self.df.rename(columns=rename_columns)
         if columns_toDrop:
             self.df = self.df.drop(columns=columns_toDrop)
         if drop_na:
             self.df.dropna(inplace=True)
-        print("Data cleaned successfully. Tasks carried out: drop columns, rename columns, drop na")
+        if columns_to_keep:
+            self.df = self.df[columns_to_keep]
+        print("Data cleaned successfully. Dataframe ready for sqlite database creation")
         return self.df
 
     def create_sqlite(self):
@@ -75,28 +83,33 @@ class DownloadData:
     def download_data1(self):
         data_p = Pipeline(self.data_url1, self.data_name1, self.data_dir)
         df = data_p.open_zip_xlsx()
-        columns_to_drop = ['Name','IPCC_annex', 'C_group_IM24_sh', 'Country_code_A3', 'ipcc_code_2006_for_standard_report', 'Substance', 'fossil_bio']
+        columns_to_drop = ['IPCC_annex', 'C_group_IM24_sh', 'Country_code_A3', 'ipcc_code_2006_for_standard_report', 'Substance', 'fossil_bio']
         columns_to_rename = {'ipcc_code_2006_for_standard_report_name': 'Emission Sector'}
         df = df.loc[df['Name'] == 'Ireland']
-        df = data_p.clean_data(rename_columns=columns_to_rename,columns_toDrop=columns_to_drop)
-        columns_to_keep = ['Emission Sector'] + [f'Y_{year}' for year in range(2004, 2019)]
+        df = data_p.clean_data(df,rename_columns=columns_to_rename,columns_toDrop=columns_to_drop)
+        columns_to_keep = ['Name'] + ['Emission Sector'] + [f'Y_{year}' for year in range(2004, 2019)]
         df = df[columns_to_keep]
+        data_p.set_df(df)
+        # dftest2 = data_p.get_df()
+        # print(dftest2.columns)
         data_p.create_sqlite()
 
     def download_data2(self):
         data_p = Pipeline(self.data_url2, self.data_name2, self.data_dir)
         df = data_p.open_csv()
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C04253V05027', 'C04251V05025','C04252V05026','UNIT']
-        df = data_p.clean_data(columns_toDrop=columns_to_drop)
+        df = data_p.clean_data(df,columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
+        data_p.set_df(df)
         data_p.create_sqlite()
                
     def download_data3(self):
         data_p = Pipeline(self.data_url3, self.data_name3, self.data_dir) 
         df = data_p.open_csv()
         columns_to_drop = ['STATISTIC', 'Statistic Label', 'TLIST(A1)', 'C014259V05033', 'C04253V05027','C04251V05025','UNIT']
-        df = data_p.clean_data(columns_toDrop=columns_to_drop)
+        df = data_p.clean_data(df,columns_toDrop=columns_to_drop)
         df = df[df['Waste Category'] != 'Total waste']
+        data_p.set_df(df)
         data_p.create_sqlite()
 
 
