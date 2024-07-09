@@ -1,6 +1,6 @@
 #!/bin/bash
 
 # install requirements
-python -m pip install -r ./project/requirements.txt
+python -m pip install -r ./src/requirements.txt
 # Run the pytest script
-python ./project/tests.py
+python ./src/tests.py

@@ -1,6 +1,10 @@
 .DS_Store
 /data/*
 !/data/.gitkeep
+!/project/tmp/.gitkeep
 *.sqlite
-/project/tmp
-/project/data
+*/data
+*/.pytest_cache
+*/__pycache__
+
+
