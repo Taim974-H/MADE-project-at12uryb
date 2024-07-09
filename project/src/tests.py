@@ -8,7 +8,6 @@ import os
 from pandas.testing import assert_frame_equal 
 
 class TestPipeline(unittest.TestCase):
-# https://docs.python.org/3/library/unittest.html
 
     def setUp(self):
         self.data_url1 = 'https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/EDGAR/datasets/v61_AP/NMVOC/v61_AP_NMVOC_1970_2018b.zip'
