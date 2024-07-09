@@ -3,6 +3,7 @@
 !/data/.gitkeep
 !/project/tmp/.gitkeep
 *.sqlite
+*/tmp
 */data
 */.pytest_cache
 */__pycache__
