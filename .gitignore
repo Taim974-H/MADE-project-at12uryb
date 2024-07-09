@@ -1,9 +1,22 @@
+# Ignore macOS system files
 .DS_Store
+
+# Ignore SQLite database files
+*.sqlite
+
+# Ignore temporary directories and files
+*/tmp
+
+# Ignore data directories, except for .gitkeep files
 /data/*
 !/data/.gitkeep
-*.sqlite
-*/tmp
 */data
+
+# Ignore pytest cache directories
 */.pytest_cache
+
+# Ignore Jupyter Notebook checkpoints
 */.ipynb_checkpoints
-*/__pycache__
+
+# Ignore Python bytecode cache directories
+*/src/__pycache__
