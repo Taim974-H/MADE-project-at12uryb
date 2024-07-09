@@ -28,8 +28,8 @@ These datasets are sourced from the Irish government's website. The first datase
 This dataset is part of a larger dataset, EDGARv6.1. The study focuses on NMVOC emission time series (1970-2018) by sector and country and the data provided in an overview table (.xls). Emission country totals are expressed in kt substance/year and the IPCC 1996 and 2006 codes are used for specification of the sectors.
 
 ## Data Analysis
-- [Data exploration](https://github.com/Taim974-H/MADE-project-at12uryb/blob/main/project/data-exploration.ipynb)
-- [Data report pdf](https://github.com/Taim974-H/MADE-project-at12uryb/blob/main/project/data-report.pdf)
+- [Data exploration](https://github.com/Taim974-H/MADE-project-at12uryb/blob/main/project/reports/analysis-report.ipynb)
+- [Data report pdf](https://github.com/Taim974-H/MADE-project-at12uryb/blob/main/project/reports/data-report.pdf)
 
 ## License
 MIT License
