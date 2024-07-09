@@ -1,11 +1,8 @@
 .DS_Store
 /data/*
 !/data/.gitkeep
-!/project/tmp/.gitkeep
 *.sqlite
 */tmp
 */data
 */.pytest_cache
-*/__pycache__
-
-
+*/.ipynb_checkpoints
